@@ -97,20 +97,17 @@ describe("Event tests", function(){
 	it("Should work with Backbone View", function(done){
 
 		var TestView = Backbone.View.extend({
-
-				render: function(options){
-					//Set ready listener
+				render: function(){
 					this.triggerReady("rendered", {testKey: "testValue"});
 				}
-
 			});
 
 		var testView = new TestView();
 
 		testView.onReady("rendered", function(v){
 			expect(v).toEqual({testKey: "testValue"});
+			done();
 		});
-		testView.onReady("rendered", done);
 
 		testView.render();
 	});
@@ -118,12 +115,9 @@ describe("Event tests", function(){
 	it("Should work with Backbone View and on('all', ...)", function(done){
 
 		var TestView = Backbone.View.extend({
-
-				render: function(options){
-					//Set ready listener
+				render: function(){
 					this.triggerReady({testKey: "testValue"});
 				}
-
 			});
 
 		var testView = new TestView();

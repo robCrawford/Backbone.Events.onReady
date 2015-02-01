@@ -11,20 +11,28 @@ Trigger using `triggerReady()`.
 
 ###Use case examples
 
-- You want to launch a modal, at many different times in an application.  
-  The View for modals is only initialised the first time it is used.  
-  You can place each call in an `onReady()` callback for the View, and call `this.triggerReady()` in the View's `render()` method.  
+- You want to log messages to a console View at many different async points, without knowing whether the View is ready yet.  
+  Place each call in a `View.onReady()` callback, and call `this.triggerReady()` in the View's `render()` method.  
   ```javascript
-  modal.view.onReady(function(){
-  	this.launch(...);
+  var ConsoleView = Backbone.View.extend({
+
+    render: function(options){
+      ...
+      this.triggerReady();
+    },
+    ...
+  });
+
+  console.onReady(function(){
+    this.log("Message 1");
   });
   ```
-  After the first launch, callbacks always run immediately.
+  Pending messages will be logged in order, once the View has rendered. Any later messages will be logged immediately.
 
 - You have a `getUser()` method in your JavaScript API, that could be called at any time, but the data may not be ready.  
   Subscribe all callbacks from the API calls to a custom event i.e.  
   `onReady("api:user", callback)`.  
-  When the data is ready, `triggerReady("api:user", {data: ...})` will pass the data to all callbacks.
+  When the data is ready, `triggerReady("api:user", {id: ...})` will pass the data to all callbacks.
   ```javascript
   var events = _.clone(Backbone.Events);
   var api = {
