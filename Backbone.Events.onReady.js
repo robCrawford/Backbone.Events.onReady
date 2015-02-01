@@ -44,6 +44,7 @@
             this.readyResponses[eventName] = dataArgs;
 
             //Run any pending callbacks
+            //Always run trigger() to allow listening via `on('all', ...)`
             this.trigger.apply(this, [eventName].concat(dataArgs));
         }
 

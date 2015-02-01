@@ -1,5 +1,5 @@
 
-var _event = _.clone(Backbone.Events);
+var events = _.clone(Backbone.Events);
 
 describe("Event tests", function(){
 
@@ -8,18 +8,18 @@ describe("Event tests", function(){
 		var callbacksCount = 0,
 			triggerCount = 0;
 
-		_event.onReady("testEvent0", function(count){
+		events.onReady("testEvent0", function(count){
 			callbacksCount++;
 		});
-		_event.onReady("testEvent0", function(count){
+		events.onReady("testEvent0", function(count){
 			callbacksCount++;
 		});
-		_event.onReady("testEvent0", function(count){
+		events.onReady("testEvent0", function(count){
 			expect(callbacksCount).toBe(2);
 			expect(triggerCount).toBe(1);
 			done();
 		});
-		_event.triggerReady("testEvent0", triggerCount++);
+		events.triggerReady("testEvent0", triggerCount++);
 
 	});
 
@@ -27,13 +27,13 @@ describe("Event tests", function(){
 
 		var callbacksCount = 0;
 
-		_event.onReady("testEvent1", function(count){
+		events.onReady("testEvent1", function(count){
 			callbacksCount++;
 		});
 
-		_event.triggerReady("testEvent1", 1);
-		_event.triggerReady("testEvent1", 2);
-		_event.triggerReady("testEvent1", 3);
+		events.triggerReady("testEvent1", 1);
+		events.triggerReady("testEvent1", 2);
+		events.triggerReady("testEvent1", 3);
 
 		expect(callbacksCount).toEqual(1);
 		done();
@@ -44,21 +44,21 @@ describe("Event tests", function(){
 
 		var callbacksCount = 0;
 
-		_event.onReady("testEvent2", function(count){
+		events.onReady("testEvent2", function(count){
 			callbacksCount++;
 			expect(count).toEqual(1);
 		});
 
-		_event.triggerReady("testEvent2", 1);
+		events.triggerReady("testEvent2", 1);
 
-		_event.onReady("testEvent2", function(count){
+		events.onReady("testEvent2", function(count){
 			callbacksCount++;
 			expect(count).toEqual(1);
 		});
 
-		_event.triggerReady("testEvent2", 7); //Should update response
+		events.triggerReady("testEvent2", 7); //Should update response
 
-		_event.onReady("testEvent2", function(count){
+		events.onReady("testEvent2", function(count){
 			callbacksCount++;
 			expect(count).toEqual(7); //Should still be cached data
 		});
