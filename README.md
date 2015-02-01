@@ -13,7 +13,7 @@ Trigger using `triggerReady()`.
 
 - You want to launch a modal, at many different times in an application.  
   The View for modals is only initialised the first time it is used.  
-  You can place each call in an `onReady()` callback for the View.  
+  You can place each call in an `onReady()` callback for the View, and call `this.triggerReady()` in the View's `render()` method.  
   ```javascript
   modal.view.onReady(function(){
   	this.launch(...);
