@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="x-ua-compatible" content="ie=edge" />
+<title> Test </title>
+
+<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
+<script src="../Backbone.Events.onReady.js"></script>
+
+<style>
+.console{
+	background: #ccc;
+	padding: 5px;
+}
+.console div{
+	background: #fff;
+	margin: 2px;
+	padding: 5px;
+	font: 12px sans-serif;
+}
+</style>
+
+<script>
+/*
+  Example:
+  Initialise before domReady
+  Call before and after domReady
+  Render after domReady
+*/
+var myConsole = (function(){
+
+	var ConsoleView = Backbone.View.extend({
+
+		className: "console",
+
+		//Outputs "<div>`key`: `value`</div>"
+		template: _.template("<% _.each(messages, function(v, k){%><div><%=k%>: <%=v%></div><%});%>"),
+
+		initialize: function(){
+			var view = this;
+
+			_.bindAll(this, "render");
+
+			this.listenTo(this.model, "change", function(){
+				view.onReady(view.render);
+			});
+
+			//Add $el on $.ready()
+			$(function(){
+				view.$el.appendTo("body");
+				view.triggerReady(); //Run any early callbacks
+			});
+		},
+
+		render: function(options){
+			this.$el.html(
+				this.template({messages: this.model.attributes})
+			);
+		}
+
+	});
+
+	var consoleModel = new Backbone.Model(),
+		consoleView = new ConsoleView({model: consoleModel});
+
+	return {
+
+		messageCount: 0,
+
+		model: consoleModel,
+
+		view: consoleView,
+
+		log: function(string){
+			this.view.model.set(++this.messageCount, string);
+		}
+
+	};
+
+})();
+
+
+//myConsole API calls before and after DOM ready
+myConsole.log("Pre domReady message 1");
+myConsole.log("Pre domReady message 2");
+
+$(function(){
+	myConsole.log("Post domReady message 1");
+
+	setTimeout(function(){
+		myConsole.log("Post domReady message 2");
+	}, 100);
+});
+
+//Backbone event logging
+myConsole.view.onReady(function(){
+	myConsole.log("View ready event callback")
+});
+myConsole.view.on("all", function(eventName){
+	myConsole.log("View `on` event: " + eventName)
+});
+
+</script>
+
+</head>
+<body>
+
+
+</body>
+</html>
