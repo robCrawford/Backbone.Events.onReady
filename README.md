@@ -59,11 +59,17 @@ These can be used with `View`, `Collection`, `Model`, etc. or with a general pur
 - onReady() events can be listened for via the usual `"all"` Backbone syntax.  
   If no `eventName` argument was specified (i.e. `view.onReady()`), the event name is just `"ready"`.  
   ```javascript
-  events.on("all", function(eventName, data){
-      if(eventName === "ready"){
-        console.log(eventName, data);
-      }
-    });
+  view.on("all", function(eventName){
+    if(eventName === "ready"){
+      console.log("View is ready");
+    }
+  });
   ```
-  If an `eventName` argument was supplied, the prefix `"ready:"` is applied when listening for `"all"` events, i.e. `"userData"` becomes `"ready:userData"`.  
-  This is to keep ready events separate from those registered using `on()`.  
+  If an `eventName` argument was supplied, the prefix `"ready:"` is applied when listening for `"all"` events, i.e. `"userData"` becomes `"ready:userData"`. This keeps ready events separate from other Backbone events.
+  ```javascript
+  events.on("all", function(eventName, data){
+    if(/ready:/.test(eventName)){
+      console.log(eventName, data);
+    }
+  });
+  ```
