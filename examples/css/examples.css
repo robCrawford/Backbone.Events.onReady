@@ -1,0 +1,10 @@
+.console{
+	background: #ccc;
+	padding: 5px;
+}
+.console div{
+	background: #fff;
+	margin: 2px;
+	padding: 5px;
+	font: 12px sans-serif;
+}

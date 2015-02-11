@@ -3,35 +3,25 @@
 <head>
 <meta charset="utf-8" />
 <meta http-equiv="x-ua-compatible" content="ie=edge" />
-<title> Test </title>
+<title> Example </title>
 
 <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
 <script src="../Backbone.Events.onReady.js"></script>
 
-<style>
-.console{
-	background: #ccc;
-	padding: 5px;
-}
-.console div{
-	background: #fff;
-	margin: 2px;
-	padding: 5px;
-	font: 12px sans-serif;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="css/examples.css">
 
 <script>
 /*
   Example:
-  Initialise before domReady
-  Call before and after domReady
-  Render after domReady
+  Initialise view before domReady
+  Render view after domReady
+  Make API calls both before and after domReady
 */
 var myConsole = (function(){
 
+	//View constructor
 	var ConsoleView = Backbone.View.extend({
 
 		className: "console",
@@ -42,40 +32,45 @@ var myConsole = (function(){
 		initialize: function(){
 			var view = this;
 
-			_.bindAll(this, "render");
-
-			this.listenTo(this.model, "change", function(){
-				view.onReady(view.render);
-			});
-
-			//Add $el on $.ready()
+			//Trigger ready in a domReady callback
+			//This could also be some other async condition 
+			//i.e. another dependency like a CSS file
 			$(function(){
 				view.$el.appendTo("body");
-				view.triggerReady(); //Run any early callbacks
+				view.triggerReady();
+			});
+
+			this.listenTo(this.model, "change", function(){
+				view.render();
 			});
 		},
 
 		render: function(options){
-			this.$el.html(
-				this.template({messages: this.model.attributes})
+			this.$el.append(
+				this.template({messages: this.model.changedAttributes()})
 			);
 		}
 
 	});
 
+
+	//Instances
 	var consoleModel = new Backbone.Model(),
 		consoleView = new ConsoleView({model: consoleModel});
 
-	return {
 
-		messageCount: 0,
+	//Module API
+	return {
 
 		model: consoleModel,
 
 		view: consoleView,
 
 		log: function(string){
-			this.view.model.set(++this.messageCount, string);
+			//Wrap logging in a view.onReady() callback
+			this.view.onReady(function(){
+				this.model.set(string, Date.now());
+			});
 		}
 
 	};
@@ -97,10 +92,10 @@ $(function(){
 
 //Backbone event logging
 myConsole.view.onReady(function(){
-	myConsole.log("View ready event callback")
+	myConsole.log("View `onReady()` callback")
 });
 myConsole.view.on("all", function(eventName){
-	myConsole.log("View `on` event: " + eventName)
+	myConsole.log("View `on('all')` event: " + eventName)
 });
 
 </script>

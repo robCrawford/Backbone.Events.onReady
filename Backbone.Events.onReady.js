@@ -1,5 +1,5 @@
-
 (function(_, Backbone){
+"use strict";
 
     var readyDispatcher = {
 
@@ -15,6 +15,9 @@
             }
             //Process label
             eventName = getReadyLabel(eventName);
+
+            //Default context to `this`
+            context = context || this;
 
             //Ready flag exists - run callback with cached response
             if(this.readyFlags[eventName]){
