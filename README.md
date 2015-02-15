@@ -14,9 +14,8 @@ These can be used with `View`, `Collection`, `Model`, etc. or with a general pur
 *See `examples` directory for complete code.*
 
 - **Using onReady() with a View**  
-  You want to log messages to a console view at many different async points, without knowing whether the view is ready yet.  
-  The view may be waiting for DOM ready, or for another dependency like a CSS file.  
-  Wrap calls in a `view.onReady()` callback, and then call `this.triggerReady()` from within the view.  
+  Say you want to log messages to a console view at many different async points, but it may not be ready. It could be waiting for DOM ready, or for another dependency like a CSS file.  
+  Wrap the calls in `view.onReady(...)`, and then call `this.triggerReady()` from within the view. Pre-ready callbacks will run in order, and then further calls will run immediately.  
   ```javascript
   var ConsoleView = Backbone.View.extend({
 
@@ -35,11 +34,10 @@ These can be used with `View`, `Collection`, `Model`, etc. or with a general pur
     myConsole.log("Start time: " + Date.now());
   });
   ```
-  Pre-ready messages will be logged in order, and any later messages will be logged immediately.
 
 - **Using onReady() for API responses**  
   You have a `getUser()` method in your JavaScript API, that could be called at any time, but the data may not be ready.  
-  Subscribe each callback to an `onReady()` event, and then call `triggerReady({...})` with the data to pass into the callbacks.
+  Subscribe each callback to an `onReady()` event, and then call `triggerReady({...})` with the data to pass into all callbacks.
   ```javascript
   var events = _.clone(Backbone.Events);
   var api = {
