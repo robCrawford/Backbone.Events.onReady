@@ -13,12 +13,7 @@
 <link rel="stylesheet" type="text/css" href="css/examples.css">
 
 <script>
-/*
-  Example:
-  Initialise view before domReady
-  Render view after domReady
-  Make API calls both before and after domReady
-*/
+
 var myConsole = (function(){
 
 	//View constructor
@@ -78,10 +73,11 @@ var myConsole = (function(){
 })();
 
 
-//myConsole API calls before and after DOM ready
+//Call API before DOM ready
 myConsole.log("Pre domReady message 1");
 myConsole.log("Pre domReady message 2");
 
+//Call API after DOM ready
 $(function(){
 	myConsole.log("Post domReady message 1");
 

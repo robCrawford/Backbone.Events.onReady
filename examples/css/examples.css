@@ -1,10 +1,13 @@
-.console{
+body{
+	font: 12px sans-serif;
 	background: #ccc;
-	padding: 5px;
 }
-.console div{
+.console{
+	padding: 5px;
+	background: #666;
+}
+div{
 	background: #fff;
 	margin: 2px;
 	padding: 5px;
-	font: 12px sans-serif;
 }

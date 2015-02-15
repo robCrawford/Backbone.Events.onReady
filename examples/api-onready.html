@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="x-ua-compatible" content="ie=edge" />
+<title> Example </title>
+
+<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
+<script src="../Backbone.Events.onReady.js"></script>
+
+<link rel="stylesheet" type="text/css" href="css/examples.css">
+
+<script>
+
+var myApp = (function(){
+
+	var events = _.clone(Backbone.Events);
+
+	return {
+
+		init: function(){
+			//This timer mocks some async operation in the application
+			setTimeout(function(){
+				myApp.createUser();
+			}, 250);
+		},
+
+		createUser: function(){
+			this.user = {
+				id: btoa(new Date().getMilliseconds()),
+				lastSeen: Date.now()
+			};
+			events.triggerReady("userData", this.user);
+		},
+
+		api: {
+			getUser: function(callback){
+				//Subscribe callback to "userData" onReady event
+				//Once event has passed, callbacks will run immediately with cached data
+				events.onReady("userData", callback);
+			}
+		},
+		
+	};
+
+})();
+
+//Call API before data is ready
+myApp.api.getUser(function(data){
+	$('<div/>').appendTo('body').html(
+		JSON.stringify(data)
+	);
+});
+
+//Initialise
+myApp.init();
+
+//Call API after data is ready
+//Note that `data` is cached this time
+setTimeout(function(){
+	myApp.api.getUser(function(data){
+		$('<div/>').appendTo('body').html(
+			JSON.stringify(data)
+		);
+	});
+}, 1000);
+
+</script>
+
+</head>
+<body>
+
+
+</body>
+</html>
