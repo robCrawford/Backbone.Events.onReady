@@ -94,8 +94,11 @@ $(function(){
 myConsole.view.onReady(function(){
 	myConsole.log("View `onReady()` callback")
 });
+myConsole.view.on("ready", function(eventName){
+	myConsole.log("View `on('ready')` listener.")
+});
 myConsole.view.on("all", function(eventName){
-	myConsole.log("View `on('all')` event: " + eventName)
+	myConsole.log("View `on('all')` listener: " + eventName)
 });
 
 </script>

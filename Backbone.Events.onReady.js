@@ -11,12 +11,11 @@
             if(typeof eventName === "function"){
                 context = callback; //1 back
                 callback = eventName; //1 back
-                eventName = ""; //Updated by getReadyLabel() below
+                eventName = ""; //Updated below
             }
-            //Process label
-            eventName = getReadyLabel(eventName);
 
-            //Default context to `this`
+            //Set defaults
+            eventName = eventName || "ready";
             context = context || this;
 
             //Ready flag exists - run callback with cached response
@@ -28,7 +27,7 @@
         },
 
         triggerReady: function(/* arguments */){
-            var eventName = "", //May be first argument or may be omitted
+            var eventName = "ready", //May be first argument or may be omitted
                 argsSplitPos = 0; //Where data arguments begin
 
             //If first argument is a string, assume it is eventName
@@ -36,8 +35,6 @@
                 eventName = arguments[0];
                 argsSplitPos = 1;
             }
-            //Process label
-            eventName = getReadyLabel(eventName);
 
             //Get data arguments, passed on to callbacks
             var dataArgs = _.toArray(arguments).slice(argsSplitPos);
@@ -47,7 +44,7 @@
             this.readyResponses[eventName] = dataArgs;
 
             //Run any pending callbacks
-            //Always run trigger() to allow listening via `on('all', ...)`
+            //Always run trigger() to allow other Backbone.Events methods
             this.trigger.apply(this, [eventName].concat(dataArgs));
         }
 
@@ -64,14 +61,5 @@
             _.extend(Backbone[p].prototype, readyDispatcher);
         }
     );
-
-    /*
-      Utils
-    */
-    function getReadyLabel(eventName){
-    //Prefix event label with 'ready:' to keep separate from on() events
-    //If no eventName is supplied then the eventName is just "ready"
-        return "ready" + (eventName ? ":" + eventName : "");
-    }
 
 })(_, Backbone);
