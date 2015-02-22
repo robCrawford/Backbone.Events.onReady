@@ -5,7 +5,7 @@ Adds `onReady` and `triggerReady` methods to `Backbone.Events`.
 
 **Behaviour:**  
 > *Before ready* - register callback.  
-> *On ready* - run all pending callbacks, passing in any arguments.  
+> *On ready* - run all pending callbacks, passing in any arguments from `triggerReady`.  
 > *After ready* - run callback immediately, with cached arguments.  
 
 ###API
@@ -15,18 +15,18 @@ i.e. `View`, `Model`, `Collection` or a general purpose [event dispatcher](http:
 
 - Using the default *"ready"* event:
 
-    - `onReady(callback)`  
+    - `object.onReady(callback)`  
       Run `callback` when `triggerReady` is called, or immediately thereafter.  
 
-    - `triggerReady([*args])`  
+    - `object.triggerReady([*args])`  
       Run all callbacks provided by `onReady`, passing in all arguments. 
 
 - With a custom *eventName* argument:
 
-    - `onReady(eventName, callback)`  
+    - `object.onReady(eventName, callback)`  
       Run `callback` when `triggerReady` is called for `eventName`, or immediately thereafter.  
 
-    - `triggerReady(eventName, [*args])`  
+    - `object.triggerReady(eventName, [*args])`  
       Run all callbacks provided by `onReady` for `eventName`, passing in all subsequent arguments.  
 
 ###Notes
