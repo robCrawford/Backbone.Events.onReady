@@ -1,13 +1,47 @@
 Backbone.Events.onReady
 =======================
 
-Adds `onReady()` and `triggerReady()` methods to `Backbone.Events`.  
-These can be used with `View`, `Collection`, `Model`, etc. or with a general purpose [event dispatcher](http://backbonejs.org/#Events).  
+Adds `onReady` and `triggerReady` methods to `Backbone.Events`.   
 
 **Behaviour:**  
-> *Before event* - register callback.  
-> *On event* - run all pending callbacks.  
-> *After event* - run callback immediately (*with cached argument values*).  
+> *Before ready* - register callback.  
+> *On ready* - run all pending callbacks, passing in any arguments.  
+> *After ready* - run callback immediately, with cached arguments.  
+
+###API
+
+The below methods are available for any object supporting the Backbone.Events API.  
+i.e. `View`, `Model`, `Collection` or a general purpose [event dispatcher](http://backbonejs.org/#Events).  
+
+- Using the default *"ready"* event:
+
+    - `onReady(callback)`  
+      Run `callback` when `triggerReady` is called, or immediately thereafter.  
+
+    - `triggerReady([*args])`  
+      Run all callbacks provided by `onReady`, passing in all arguments. 
+
+- With a custom *eventName* argument:
+
+    - `onReady(eventName, callback)`  
+      Run `callback` when `triggerReady` is called for `eventName`, or immediately thereafter.  
+
+    - `triggerReady(eventName, [*args])`  
+      Run all callbacks provided by `onReady` for `eventName`, passing in all subsequent arguments.  
+
+###Notes
+
+- Calling `triggerReady()` more than once will update the arguments passed in to future callbacks, but do nothing else.  
+
+- onReady() event names can also be listened for via the other Backbone.Events methods.  
+  If no `eventName` argument was specified (i.e. `view.onReady()`), the event name is `"ready"`.  
+  ```javascript
+  view.on("all", function(eventName){
+    if(eventName === "ready"){
+      console.log("View is ready");
+    }
+  });
+  ```
 
 ###Use case examples
 
@@ -49,17 +83,3 @@ These can be used with `View`, `Collection`, `Model`, etc. or with a general pur
   events.triggerReady("userData", {id: "ABC123"});
   ```
   Pending callbacks will run in order, and any future calls will run immediately with cached data. Cached values can be refreshed by calling `triggerReady({...})` again.
-
-###Notes
-
-- Calling `triggerReady()` more than once will update the arguments passed in to future callbacks, but do nothing else.  
-
-- onReady() event names can also be listened for via the other Backbone.Events methods.  
-  If no `eventName` argument was specified (i.e. `view.onReady()`), the event name is `"ready"`.  
-  ```javascript
-  view.on("all", function(eventName){
-    if(eventName === "ready"){
-      console.log("View is ready");
-    }
-  });
-  ```
