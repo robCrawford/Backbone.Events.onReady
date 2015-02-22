@@ -27,6 +27,9 @@
         },
 
         triggerReady: function(/* arguments */){
+        //NOTE: all arguments are passed in to callbacks except the optional `eventName` first arg
+        //However, the docs specify argument options as (dataObject) or (eventName, dataObject)
+        //This is because intending to pass a string as the first arg would incorrectly overwrite `eventName`
             var eventName = "ready", //May be first argument or may be omitted
                 argsSplitPos = 0; //Where data arguments begin
 

@@ -5,8 +5,8 @@ Adds `onReady` and `triggerReady` methods to `Backbone.Events`.
 
 **Behaviour:**  
 > *Before ready* - register callback.  
-> *On ready* - run all pending callbacks, passing in any arguments from `triggerReady`.  
-> *After ready* - run callback immediately, with cached arguments.  
+> *On ready* - run all pending callbacks, passing in any data from `triggerReady`.  
+> *After ready* - run callback immediately, passing in cached data.  
 
 ###API
 
@@ -18,20 +18,20 @@ i.e. `View`, `Model`, `Collection` or a general purpose [event dispatcher](http:
     - `object.onReady(callback)`  
       Run `callback` when `triggerReady` is called, or immediately thereafter.  
 
-    - `object.triggerReady([*args])`  
-      Run all callbacks provided by `onReady`, passing in all arguments. 
+    - `object.triggerReady(dataObject)`  
+      Run all callbacks provided by `onReady`, passing in optional `dataObject`. 
 
 - With a custom *eventName* argument:
 
     - `object.onReady(eventName, callback)`  
       Run `callback` when `triggerReady` is called for `eventName`, or immediately thereafter.  
 
-    - `object.triggerReady(eventName, [*args])`  
-      Run all callbacks provided by `onReady` for `eventName`, passing in all subsequent arguments.  
+    - `object.triggerReady(eventName, dataObject)`  
+      Run all callbacks provided by `onReady` for `eventName`, passing in optional `dataObject`.  
 
 ###Notes
 
-- Calling `triggerReady()` more than once will update the arguments passed in to future callbacks, but do nothing else.  
+- Calling `triggerReady()` more than once will update the data passed to future callbacks, but do nothing else.  
 
 - onReady() event names can also be listened for via the other Backbone.Events methods.  
   If no `eventName` argument was specified (i.e. `view.onReady()`), the event name is `"ready"`.  
