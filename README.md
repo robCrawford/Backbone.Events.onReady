@@ -71,7 +71,7 @@ i.e. `View`, `Model`, `Collection` or a general purpose [event dispatcher](http:
 
 - **Using onReady() for API responses**  
   You have a `getUser()` method in your JavaScript API, that could be called at any time, but the data may not be ready.  
-  Subscribe each callback to an `onReady()` event, and then call `triggerReady({...})` with the data to pass into all callbacks.
+  Subscribe each callback to `onReady(eventName)`, and then call `triggerReady(eventName, {...})` with the data to pass into all callbacks.
   ```javascript
   var events = _.clone(Backbone.Events);
   var api = {
@@ -82,4 +82,4 @@ i.e. `View`, `Model`, `Collection` or a general purpose [event dispatcher](http:
   ...
   events.triggerReady("userData", {id: "ABC123"});
   ```
-  Pending callbacks will run in order, and any future calls will run immediately with cached data. Cached values can be refreshed by calling `triggerReady({...})` again.
+  Pending callbacks will run in order, and any future calls will run immediately with cached data. Cached values can be refreshed by calling `triggerReady(eventName, {...})` again.
